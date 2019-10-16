@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhdtedu.system.dao.mapper.SysFileInfoMapper">
+    <resultMap id="BaseResultMap" type="com.zhdtedu.system.dao.entity.SysFileInfo" >
+        <id column="ID_" property="id" jdbcType="INTEGER" />
+        <result column="FILE_CODE_" property="fileCode" jdbcType="VARCHAR"/>
+        <result column="FILE_NAME_" property="fileName" jdbcType="VARCHAR"/>
+        <result column="FILE_PATH_" property="filePath" jdbcType="VARCHAR"/>
+        <result column="FILE_SIZE_" property="fileSize" jdbcType="INTEGER"/>
+        <result column="UPLOAD_DATE_" property="uploadDate" jdbcType="TIMESTAMP"/>
+        <result column="FILE_TYPE_" property="fileType" jdbcType="VARCHAR"/>
+        <result column="TEMP_CODE_" property="tempCode" jdbcType="VARCHAR"/>
+        <result column="URL_" property="url" jdbcType="VARCHAR"/>
+        <result column="STATUS_" property="status" jdbcType="VARCHAR"/>
+        <result column="EXT_" property="ext" jdbcType="VARCHAR"/>
+        <result column="GROUP_NAME_" property="groupName" jdbcType="VARCHAR"/>
+        <result column="REMOTE_FILE_NAME_" property="remoteFileName" jdbcType="VARCHAR"/>
+
+    </resultMap>
+    <insert id="insertSelective" parameterType="com.zhdtedu.system.dao.entity.SysFileInfo">
+        insert into sys_file_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+                ID_,
+            </if>
+            <if test="fileCode!=null">
+                FILE_CODE_,
+            </if>
+            <if test="fileName!=null">
+                FILE_NAME_,
+            </if>
+            <if test="filePath!=null">
+                FILE_PATH_,
+            </if>
+            <if test="fileSize!=null">
+                FILE_SIZE_,
+            </if>
+            <if test="uploadDate!=null">
+                UPLOAD_DATE_,
+            </if>
+            <if test="fileType!=null">
+                FILE_TYPE_,
+            </if>
+            <if test="tempCode!=null">
+                TEMP_CODE_,
+            </if>
+            <if test="url!=null">
+                URL_,
+            </if>
+            <if test="status!=null">
+                STATUS_,
+            </if>
+            <if test="ext!=null">
+                EXT_,
+            </if>
+            <if test="groupName!=null">
+                GROUP_NAME_,
+            </if>
+            <if test="remoteFileName!=null">
+                REMOTE_FILE_NAME_,
+            </if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+                #{id},
+            </if>
+            <if test="fileCode!=null">
+                #{fileCode,jdbcType=VARCHAR},
+            </if>
+            <if test="fileName!=null">
+                #{fileName,jdbcType=VARCHAR},
+            </if>
+            <if test="filePath!=null">
+                #{filePath,jdbcType=VARCHAR},
+            </if>
+            <if test="fileSize!=null">
+                #{fileSize},
+            </if>
+            <if test="uploadDate!=null">
+                #{uploadDate},
+            </if>
+            <if test="fileType!=null">
+                #{fileType,jdbcType=VARCHAR},
+            </if>
+            <if test="tempCode!=null">
+                #{fileCode,jdbcType=VARCHAR},
+            </if>
+            <if test="url!=null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="status!=null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="ext!=null">
+                #{ext,jdbcType=VARCHAR},
+            </if>
+            <if test="groupName!=null">
+                #{groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="remoteFileName!=null">
+                #{remoteFileName,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectByFileCode" parameterType="String" resultMap="BaseResultMap">
+        select * from sys_file_info where  file_code_ = #{fileCode}
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select * from sys_file_info where id_ = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from sys_file_info where ID_ = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <update id="updateFileCode" parameterType="java.util.Map">
+        update sys_file_info set file_code_ = #{nowCode,jdbcType=VARCHAR},temp_code_=#{nowCode,jdbcType=VARCHAR} where temp_code_ = #{oldCode,jdbcType=VARCHAR}
+    </update>
+</mapper>

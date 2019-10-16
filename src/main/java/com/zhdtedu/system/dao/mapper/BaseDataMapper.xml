@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhdtedu.system.dao.mapper.BaseDataMapper" >
+  <resultMap id="BaseResultMap" type="com.zhdtedu.system.dao.entity.BaseData" >
+    <id column="ID_" property="id" jdbcType="BIGINT" />
+    <result column="PARENT_ID_" property="parentId" jdbcType="BIGINT" />
+    <result column="NAME_" property="name" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME_" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME_" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="CODE_" property="code" jdbcType="INTEGER" />
+    <result column="STATUS_" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.zhdtedu.system.dao.entity.BaseData" extends="BaseResultMap" >
+    <result column="DESCRIPTION_" property="description" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <!--根据parentId查询列表 "  parameterType="String"-->
+  <select id="selectByExample2" resultMap="BaseResultMap"   >
+    select
+    ID_, PARENT_ID_, NAME_, DESCRIPTION_,CREATE_TIME_, UPDATE_TIME_, CODE_, STATUS_
+    from sys_dict_base
+    where 1=1
+    <if test="parentId != null">
+      and PARENT_ID_=#{parentId}
+    </if>
+    limit ${(pageNo-1)*pageSize},${pageSize}
+  </select>
+  <!-- 获得总记录数 -->
+
+  <select id="getTotalCount" resultType="int"   >
+    select
+    count(1) as count
+    from sys_dict_base
+    where 1=1
+    <if test="parentId != null">
+      and PARENT_ID_=#{parentId}
+    </if>
+
+  </select>
+
+  <select id="selectByCondition" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from sys_dict_base
+    where 1=1
+    <if test="parentId != null">
+      and PARENT_ID_=#{parentId}
+    </if>
+    <if test="orderBy!=null" >
+      order by  #{orderBy}
+    </if>
+    <!--    <if test="pageSize!=null">
+          limit ${(pageNo-1)*pageSize},${pageSize}
+        </if>-->
+  </select>
+
+
+
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID_, PARENT_ID_, NAME_, CREATE_TIME_, UPDATE_TIME_, CODE_, STATUS_
+  </sql>
+  <sql id="Blob_Column_List" >
+    DESCRIPTION_
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.zhdtedu.system.dao.entity.BaseDataExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from sys_dict_base
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.zhdtedu.system.dao.entity.BaseDataExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from sys_dict_base
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from sys_dict_base
+    where ID_ = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from sys_dict_base
+    where ID_ = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zhdtedu.system.dao.entity.BaseDataExample" >
+    delete from sys_dict_base
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zhdtedu.system.dao.entity.BaseData" >
+    insert into sys_dict_base (ID_, PARENT_ID_, NAME_,
+      CREATE_TIME_, UPDATE_TIME_, CODE_,
+      STATUS_, DESCRIPTION_)
+    values (#{id,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR},
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{code,jdbcType=INTEGER},
+      #{status,jdbcType=INTEGER}, #{description,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhdtedu.system.dao.entity.BaseData" >
+    insert into sys_dict_base
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID_,
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID_,
+      </if>
+      <if test="name != null" >
+        NAME_,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME_,
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME_,
+      </if>
+      <if test="code != null" >
+        CODE_,
+      </if>
+      <if test="status != null" >
+        STATUS_,
+      </if>
+      <if test="description != null" >
+        DESCRIPTION_,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zhdtedu.system.dao.entity.BaseDataExample" resultType="java.lang.Integer" >
+    select count(*) from sys_dict_base
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update sys_dict_base
+    <set >
+      <if test="record.id != null" >
+        ID_ = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.parentId != null" >
+        PARENT_ID_ = #{record.parentId,jdbcType=BIGINT},
+      </if>
+      <if test="record.name != null" >
+        NAME_ = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        CREATE_TIME_ = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        UPDATE_TIME_ = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.code != null" >
+        CODE_ = #{record.code,jdbcType=INTEGER},
+      </if>
+      <if test="record.status != null" >
+        STATUS_ = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.description != null" >
+        DESCRIPTION_ = #{record.description,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update sys_dict_base
+    set ID_ = #{record.id,jdbcType=BIGINT},
+    PARENT_ID_ = #{record.parentId,jdbcType=BIGINT},
+    NAME_ = #{record.name,jdbcType=VARCHAR},
+    CREATE_TIME_ = #{record.createTime,jdbcType=TIMESTAMP},
+    UPDATE_TIME_ = #{record.updateTime,jdbcType=TIMESTAMP},
+    CODE_ = #{record.code,jdbcType=INTEGER},
+    STATUS_ = #{record.status,jdbcType=INTEGER},
+    DESCRIPTION_ = #{record.description,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update sys_dict_base
+    set ID_ = #{record.id,jdbcType=BIGINT},
+    PARENT_ID_ = #{record.parentId,jdbcType=BIGINT},
+    NAME_ = #{record.name,jdbcType=VARCHAR},
+    CREATE_TIME_ = #{record.createTime,jdbcType=TIMESTAMP},
+    UPDATE_TIME_ = #{record.updateTime,jdbcType=TIMESTAMP},
+    CODE_ = #{record.code,jdbcType=INTEGER},
+    STATUS_ = #{record.status,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhdtedu.system.dao.entity.BaseData" >
+    update sys_dict_base
+    <set >
+      <if test="parentId != null" >
+        PARENT_ID_ = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        NAME_ = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME_ = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME_ = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="code != null" >
+        CODE_ = #{code,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        STATUS_ = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        DESCRIPTION_ = #{description,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where ID_ = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zhdtedu.system.dao.entity.BaseData" >
+    update sys_dict_base
+    set PARENT_ID_ = #{parentId,jdbcType=BIGINT},
+      NAME_ = #{name,jdbcType=VARCHAR},
+      CREATE_TIME_ = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME_ = #{updateTime,jdbcType=TIMESTAMP},
+      CODE_ = #{code,jdbcType=INTEGER},
+      STATUS_ = #{status,jdbcType=INTEGER},
+      DESCRIPTION_ = #{description,jdbcType=LONGVARCHAR}
+    where ID_ = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhdtedu.system.dao.entity.BaseData" >
+    update sys_dict_base
+    set PARENT_ID_ = #{parentId,jdbcType=BIGINT},
+      NAME_ = #{name,jdbcType=VARCHAR},
+      CREATE_TIME_ = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME_ = #{updateTime,jdbcType=TIMESTAMP},
+      CODE_ = #{code,jdbcType=INTEGER},
+      STATUS_ = #{status,jdbcType=INTEGER}
+    where ID_ = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

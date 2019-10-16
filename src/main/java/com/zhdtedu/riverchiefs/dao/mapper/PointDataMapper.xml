@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhdtedu.riverchiefs.dao.mapper.PointDataMapper" >
+  <resultMap id="BaseResultMap" type="com.zhdtedu.riverchiefs.dao.entity.PointData" >
+    <id column="ID_" property="id" jdbcType="INTEGER" />
+    <result column="POINT_ID_" property="pointId" jdbcType="BIGINT" />
+    <result column="QUOTA_" property="quota" jdbcType="VARCHAR" />
+    <result column="TIME_" property="time" jdbcType="VARCHAR" />
+    <result column="MONITOR_VAULE_" property="monitor_value" jdbcType="INTEGER" />
+    <result column="STANDARD_VAlUE_" property="standard_value" jdbcType="INTEGER" />
+    <result column="UNIT_" property="unit" jdbcType="VARCHAR" />
+    <result column="IS_QUALIFIED_" property="is_qualified" jdbcType="VARCHAR" />
+    <result column="MULTIPLE_" property="multiple" jdbcType="INTEGER" />
+    <association property="pointInfo" javaType="com.zhdtedu.riverchiefs.dao.entity.PointInfo">
+      <result column="CODE_" property="code" jdbcType="VARCHAR" />
+      <result column="POINT_NAME_" property="name" jdbcType="VARCHAR" />
+      <result column="LEVEL_" property="level" jdbcType="VARCHAR" />
+      <result column="LOCATION_" property="location" jdbcType="VARCHAR" />
+      <result column="CATEGORY_ID_" property="categoryId" jdbcType="BIGINT" />
+      <result column="ADDRESS_" property="address" jdbcType="VARCHAR" />
+      <result column="DESCRIPTION_" property="description" jdbcType="VARCHAR" />
+      <result column="NETWORK_CODE_" property="networkCode" jdbcType="BIGINT" />
+      <result column="MANAGE_DEPT_ID_" property="manageDeptId" jdbcType="BIGINT" />
+      <result column="OWERSHIP_ID_" property="owershipId" jdbcType="BIGINT" />
+      <result column="ATTACH_PATH_" property="attachPath" jdbcType="VARCHAR" />
+      <result column="CREATE_TIME_" property="createTime" jdbcType="TIMESTAMP" />
+      <result column="UPDATE_TIME_" property="updateTime" jdbcType="TIMESTAMP" />
+    </association>
+  </resultMap>
+
+  <insert id="insert" parameterType="com.zhdtedu.riverchiefs.dao.entity.PointData">
+    insert into rcs_point_data ( POINT_ID_, QUOTA_,
+      TIME_, MONITOR_VAULE_, STANDARD_VAlUE_,
+      UNIT_, IS_QUALIFIED_, MULTIPLE_
+      )
+    values ( #{pointId,jdbcType=BIGINT}, #{quota,jdbcType=VARCHAR},
+      #{time,jdbcType=TIMESTAMP}, #{monitor_value,jdbcType=INTEGER}, #{standard_value,jdbcType=INTEGER},
+      #{unit,jdbcType=VARCHAR}, #{is_qualified,jdbcType=VARCHAR}, #{multiple,jdbcType=INTEGER}
+      )
+  </insert>
+  <delete id="deleteById" parameterType="java.lang.Integer">
+    delete from rcs_point_data
+    where ID_ = #{id,jdbcType=INTEGER}
+  </delete>
+  <update id="updateById" parameterType="com.zhdtedu.riverchiefs.dao.entity.PointData" >
+    update rcs_point_data
+    set ID_ = #{id,jdbcType=INTEGER},
+      POINT_ID_ = #{pointId,jdbcType=BIGINT},
+      QUOTA_ = #{quota,jdbcType=VARCHAR},
+      TIME_ = #{time,jdbcType=TIMESTAMP},
+      MONITOR_VAULE_ = #{monitor_value,jdbcType=INTEGER},
+      STANDARD_VAlUE_ = #{standard_value,jdbcType=INTEGER},
+      UNIT_ = #{unit,jdbcType=VARCHAR},
+      IS_QUALIFIED_ = #{is_qualified,jdbcType=VARCHAR},
+      MULTIPLE_ = #{multiple,jdbcType=INTEGER}
+    where ID_ = #{id,jdbcType=BIGINT}
+  </update>
+
+  <!-- 获得总记录数 -->
+
+  <select id="getTotalCount" resultType="int"   >
+    select count(*)
+    from rcs_point_data a  , rcs_point_info b
+    where 1=1 and  a.POINT_ID_=b.ID_
+    <if test="name != null">
+      and NAME_=#{name}
+    </if>
+    <if test="start_time != null">
+      and TIME_ &gt; #{start_time}
+    </if>
+    <if test="end_time != null">
+      and TIME_ &lt;#{end_time}
+    </if>
+  </select>
+  <!--根据名称和开始时间，结束时间获取监测点列表 " -->
+  <select id="getLists" resultMap="BaseResultMap"   >
+    select
+    a.ID_ ,a.POINT_ID_ ,a.QUOTA_,a.TIME_,a.MONITOR_VAULE_,a.STANDARD_VAlUE_,a.UNIT_,a.IS_QUALIFIED_ ,a.MULTIPLE_ ,
+    b.CODE_, b.NAME_ as POINT_NAME_, b.LEVEL_, b.LOCATION_, b.CATEGORY_ID_, b.ADDRESS_, b.DESCRIPTION_, b.NETWORK_CODE_,
+    b.MANAGE_DEPT_ID_, b.OWERSHIP_ID_, b.ATTACH_PATH_, b.CREATE_TIME_, b.UPDATE_TIME_
+    from rcs_point_data a  , rcs_point_info b
+    where 1=1 and  a.POINT_ID_=b.ID_
+    <if test="name != null">
+      and b.NAME_=#{name}
+    </if>
+    <if test="start_time != null">
+      and TIME_ &gt;= #{start_time}
+    </if>
+    <if test="end_time != null">
+      and TIME_ &lt;= #{end_time}
+    </if>
+    limit ${(pageIndex-1)*pageSize},${pageSize}
+
+  </select>
+</mapper>

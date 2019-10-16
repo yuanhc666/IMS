@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhdtedu.riverchiefs.dao.mapper.RcsArchiveFlowVoMapper" >
+
+  
+    <resultMap id="QueryRcsArchiveFlowVo" type="com.zhdtedu.riverchiefs.bean.RcsArchiveFlowVo" >
+        <result column="ID_" property="archId" ></result>
+        <result column="ARCH_NUM_" property="archNum"></result>
+        <result column="QUESTION_FROM_" property="questionFrom"></result>
+        <result column="QUESTION_TYPE_" property="questionType"></result>
+        <result column="SUOS_LIUY_" property="suosLiuy"></result>
+        <result column="STATUS_" property="status"></result>
+        <result column="OPER_TIME_" property="operTime"></result>
+        <result column="DEPT_ID_" property="deptId"></result>
+    </resultMap>
+    <select id="selectRcsArchiveFlowVoByCondition" resultMap="QueryRcsArchiveFlowVo"
+            parameterType="com.zhdtedu.riverchiefs.bean.RcsArchiveFlowVo">
+        SELECT DISTINCT i.ID_,i.ARCH_NUM_,i.QUESTION_FROM_,i.QUESTION_TYPE_,i.SUOS_LIUY_,i.STATUS_,f.OPER_TIME_,f.DEPT_ID_
+        FROM rcs_archive_flow f,
+        rcs_archive_info i
+        <where>
+            i.STATUS_ =  '2' and i.REPORT_ID_ = #{operator}
+            <if test="archNum!=null and archNum!=''">
+                and i.ARCH_NUM_ LIKE CONCAT('%',#{archNum},'%')
+            </if>
+            <if test="questionFrom!=null and questionFrom!=''">
+                and i.QUESTION_FROM_ = #{questionFrom}
+            </if>
+            <if test="questionType!=null and questionType!=''">
+                and i.QUESTION_TYPE_ LIKE CONCAT('%',#{questionType},'%')
+            </if>
+            <if test="suosLiuy!=null and suosLiuy!=''">
+                and i.SUOS_LIUY_ LIKE CONCAT('%',#{suosLiuy},'%')
+            </if>
+            <if test="status!=null and status!=''">
+                and i.STATUS_ = #{status}
+            </if>
+            <if test="deptId!=null and deptId!=''">
+                and f.DEPT_ID_ = #{deptId}
+            </if>
+        </where>
+        GROUP BY i.ARCH_NUM_
+    </select>
+
+    <select id="selectRcsArchiveFlowVoHandledListByConditon" resultMap="QueryRcsArchiveFlowVo" parameterType="com.zhdtedu.riverchiefs.bean.RcsArchiveFlowVo">
+        SELECT DISTINCT i.ID_,i.ARCH_NUM_,i.QUESTION_FROM_,i.QUESTION_TYPE_,i.SUOS_LIUY_,i.STATUS_,f.OPER_TIME_,f.DEPT_ID_
+        FROM rcs_archive_flow f,
+        rcs_archive_info i
+        <where>
+            (i.STATUS_ =  '6' or i.STATUS_ =  '4' or i.STATUS_ =  '1' or i.STATUS_ =  '2')
+            <if test="archNum!=null and archNum!=''">
+                and i.ARCH_NUM_ LIKE CONCAT('%',#{archNum},'%')
+            </if>
+            <if test="questionFrom!=null and questionFrom!=''">
+                and i.QUESTION_FROM_ = #{questionFrom}
+            </if>
+            <if test="questionType!=null and questionType!=''">
+                and i.QUESTION_TYPE_ LIKE CONCAT('%',#{questionType},'%')
+            </if>
+            <if test="suosLiuy!=null and suosLiuy!=''">
+                and i.SUOS_LIUY_ LIKE CONCAT('%',#{suosLiuy},'%')
+            </if>
+            <if test="status!=null and status!=''">
+                and i.STATUS_ = #{status}
+            </if>
+            <if test="deptId!=null and deptId!=''">
+                and f.DEPT_ID_ = #{deptId}
+            </if>
+        </where>
+        GROUP BY i.ARCH_NUM_
+    </select>
+
+
+
+    <resultMap id="QueryRcsArchiveFlowVoDispatchedByConditon" type="com.zhdtedu.riverchiefs.bean.RcsArchiveFlowVo" >
+        <result column="ID_" property="archId" ></result>
+        <result column="ARCH_NUM_" property="archNum"></result>
+        <result column="QUESTION_FROM_" property="questionFrom"></result>
+        <result column="QUESTION_TYPE_" property="questionType"></result>
+        <result column="SUOS_LIUY_" property="suosLiuy"></result>
+        <result column="STATUS_" property="status"></result>
+        <result column="OPER_TIME_" property="operTime"></result>
+        <result column="TIMES_" property="times"></result>
+        <result column="UNIT_" property="unit"></result>
+        <result column="DEPT_ID_" property="deptId"></result>
+    </resultMap>
+    <select id="selectRcsArchiveFlowVoDispatchedListByConditon" resultMap="QueryRcsArchiveFlowVoDispatchedByConditon">
+        SELECT DISTINCT i.ID_,i.ARCH_NUM_,i.QUESTION_FROM_,i.QUESTION_TYPE_,i.SUOS_LIUY_,i.STATUS_,f.OPER_TIME_,f.TIMES_,f.UNIT_,f.DEPT_ID_
+        FROM rcs_archive_flow f,
+        rcs_archive_info i
+        <where>
+            i.STATUS_ =  '7'
+            <if test="archNum!=null and archNum!=''">
+                and i.ARCH_NUM_ LIKE CONCAT('%',#{archNum},'%')
+            </if>
+            <if test="questionFrom!=null and questionFrom!=''">
+                and i.QUESTION_FROM_ = #{questionFrom}
+            </if>
+            <if test="questionType!=null and questionType!=''">
+                and i.QUESTION_TYPE_ LIKE CONCAT('%',#{questionType},'%')
+            </if>
+            <if test="suosLiuy!=null and suosLiuy!=''">
+                and i.SUOS_LIUY_ LIKE CONCAT('%',#{suosLiuy},'%')
+            </if>
+            <if test="status!=null and status!=''">
+                and i.STATUS_ = #{status}
+            </if>
+            <if test="deptId!=null and deptId!=''">
+                and f.DEPT_ID_ = #{deptId}
+            </if>
+        </where>
+        GROUP BY i.ARCH_NUM_
+    </select>
+
+    <select id="selectRcsArchiveFlowVoAllListByConditon" resultMap="QueryRcsArchiveFlowVo" parameterType="com.zhdtedu.riverchiefs.bean.RcsArchiveFlowVo">
+        SELECT DISTINCT i.ID_,i.ARCH_NUM_,i.QUESTION_FROM_,i.QUESTION_TYPE_,i.SUOS_LIUY_,i.STATUS_,f.OPER_TIME_,f.DEPT_ID_
+        FROM rcs_archive_flow f,
+        rcs_archive_info i
+        <where>
+            <if test="archNum!=null and archNum!=''">
+                and i.ARCH_NUM_ LIKE CONCAT('%',#{archNum},'%')
+            </if>
+            <if test="questionFrom!=null and questionFrom!=''">
+                and i.QUESTION_FROM_ = #{questionFrom}
+            </if>
+            <if test="questionType!=null and questionType!=''">
+                and i.QUESTION_TYPE_ LIKE CONCAT('%',#{questionType},'%')
+            </if>
+            <if test="suosLiuy!=null and suosLiuy!=''">
+                and i.SUOS_LIUY_ LIKE CONCAT('%',#{suosLiuy},'%')
+            </if>
+            <if test="status!=null and status!=''">
+                and i.STATUS_ = #{status}
+            </if>
+            <if test="deptId!=null and deptId!=''">
+                and f.DEPT_ID_ = #{deptId}
+            </if>
+        </where>
+        GROUP BY i.ARCH_NUM_
+    </select>
+</mapper>

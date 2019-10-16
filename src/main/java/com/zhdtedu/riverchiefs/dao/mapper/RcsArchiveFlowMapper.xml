@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhdtedu.riverchiefs.dao.mapper.RcsArchiveFlowMapper" >
+  <resultMap id="BaseResultMap" type="com.zhdtedu.riverchiefs.dao.entity.RcsArchiveFlow" >
+    <id column="ID_" property="id" jdbcType="BIGINT" />
+    <result column="OPER_NUM_" property="operNum" jdbcType="VARCHAR" />
+    <result column="OPINION_" property="opinion" jdbcType="VARCHAR" />
+    <result column="OPERATION_" property="operation" jdbcType="VARCHAR" />
+    <result column="STATUS_" property="status" jdbcType="VARCHAR" />
+    <result column="OPERATOR_" property="operator" jdbcType="VARCHAR" />
+    <result column="OPER_TIME_" property="operTime" jdbcType="TIMESTAMP" />
+    <result column="TIMES_" property="times" jdbcType="INTEGER" />
+    <result column="UNIT_" property="unit" jdbcType="VARCHAR" />
+    <result column="DEPT_ID_" property="deptId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID_, OPER_NUM_, OPINION_, OPERATION_, STATUS_, OPERATOR_, OPER_TIME_, TIMES_, UNIT_, 
+    DEPT_ID_
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.zhdtedu.riverchiefs.dao.entity.RcsArchiveFlowExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from rcs_archive_flow
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from rcs_archive_flow
+    where ID_ = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from rcs_archive_flow
+    where ID_ = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zhdtedu.riverchiefs.dao.entity.RcsArchiveFlowExample" >
+    delete from rcs_archive_flow
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zhdtedu.riverchiefs.dao.entity.RcsArchiveFlow" >
+    insert into rcs_archive_flow ( OPER_NUM_, OPINION_,
+      OPERATION_, STATUS_, OPERATOR_, 
+      OPER_TIME_, TIMES_, UNIT_, 
+      DEPT_ID_)
+    values (#{operNum,jdbcType=VARCHAR}, #{opinion,jdbcType=VARCHAR},
+      #{operation,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, 
+      #{operTime,jdbcType=TIMESTAMP}, #{times,jdbcType=INTEGER}, #{unit,jdbcType=VARCHAR}, 
+      #{deptId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhdtedu.riverchiefs.dao.entity.RcsArchiveFlow" >
+    insert into rcs_archive_flow
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID_,
+      </if>
+      <if test="operNum != null" >
+        OPER_NUM_,
+      </if>
+      <if test="opinion != null" >
+        OPINION_,
+      </if>
+      <if test="operation != null" >
+        OPERATION_,
+      </if>
+      <if test="status != null" >
+        STATUS_,
+      </if>
+      <if test="operator != null" >
+        OPERATOR_,
+      </if>
+      <if test="operTime != null" >
+        OPER_TIME_,
+      </if>
+      <if test="times != null" >
+        TIMES_,
+      </if>
+      <if test="unit != null" >
+        UNIT_,
+      </if>
+      <if test="deptId != null" >
+        DEPT_ID_,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="operNum != null" >
+        #{operNum,jdbcType=VARCHAR},
+      </if>
+      <if test="opinion != null" >
+        #{opinion,jdbcType=VARCHAR},
+      </if>
+      <if test="operation != null" >
+        #{operation,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null" >
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="operTime != null" >
+        #{operTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="times != null" >
+        #{times,jdbcType=INTEGER},
+      </if>
+      <if test="unit != null" >
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="deptId != null" >
+        #{deptId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zhdtedu.riverchiefs.dao.entity.RcsArchiveFlowExample" resultType="java.lang.Integer" >
+    select count(*) from rcs_archive_flow
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update rcs_archive_flow
+    <set >
+      <if test="record.id != null" >
+        ID_ = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.operNum != null" >
+        OPER_NUM_ = #{record.operNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.opinion != null" >
+        OPINION_ = #{record.opinion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operation != null" >
+        OPERATION_ = #{record.operation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        STATUS_ = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operator != null" >
+        OPERATOR_ = #{record.operator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operTime != null" >
+        OPER_TIME_ = #{record.operTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.times != null" >
+        TIMES_ = #{record.times,jdbcType=INTEGER},
+      </if>
+      <if test="record.unit != null" >
+        UNIT_ = #{record.unit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deptId != null" >
+        DEPT_ID_ = #{record.deptId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update rcs_archive_flow
+    set ID_ = #{record.id,jdbcType=BIGINT},
+      OPER_NUM_ = #{record.operNum,jdbcType=VARCHAR},
+      OPINION_ = #{record.opinion,jdbcType=VARCHAR},
+      OPERATION_ = #{record.operation,jdbcType=VARCHAR},
+      STATUS_ = #{record.status,jdbcType=VARCHAR},
+      OPERATOR_ = #{record.operator,jdbcType=VARCHAR},
+      OPER_TIME_ = #{record.operTime,jdbcType=TIMESTAMP},
+      TIMES_ = #{record.times,jdbcType=INTEGER},
+      UNIT_ = #{record.unit,jdbcType=VARCHAR},
+      DEPT_ID_ = #{record.deptId,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhdtedu.riverchiefs.dao.entity.RcsArchiveFlow" >
+    update rcs_archive_flow
+    <set >
+      <if test="operNum != null" >
+        OPER_NUM_ = #{operNum,jdbcType=VARCHAR},
+      </if>
+      <if test="opinion != null" >
+        OPINION_ = #{opinion,jdbcType=VARCHAR},
+      </if>
+      <if test="operation != null" >
+        OPERATION_ = #{operation,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS_ = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="operator != null" >
+        OPERATOR_ = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="operTime != null" >
+        OPER_TIME_ = #{operTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="times != null" >
+        TIMES_ = #{times,jdbcType=INTEGER},
+      </if>
+      <if test="unit != null" >
+        UNIT_ = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="deptId != null" >
+        DEPT_ID_ = #{deptId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID_ = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhdtedu.riverchiefs.dao.entity.RcsArchiveFlow" >
+    update rcs_archive_flow
+    set OPER_NUM_ = #{operNum,jdbcType=VARCHAR},
+      OPINION_ = #{opinion,jdbcType=VARCHAR},
+      OPERATION_ = #{operation,jdbcType=VARCHAR},
+      STATUS_ = #{status,jdbcType=VARCHAR},
+      OPERATOR_ = #{operator,jdbcType=VARCHAR},
+      OPER_TIME_ = #{operTime,jdbcType=TIMESTAMP},
+      TIMES_ = #{times,jdbcType=INTEGER},
+      UNIT_ = #{unit,jdbcType=VARCHAR},
+      DEPT_ID_ = #{deptId,jdbcType=VARCHAR}
+    where ID_ = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectByOperNum" resultMap="BaseResultMap" parameterType="com.zhdtedu.riverchiefs.dao.entity.RcsArchiveFlow" >
+    select
+    <include refid="Base_Column_List" />
+    from rcs_archive_flow
+    <where>
+      OPER_NUM_ = #{operNum}
+    </where>
+    order by ID_ desc
+  </select>
+
+
+  <select id="getUserByOperator" resultType="String" parameterType="com.zhdtedu.riverchiefs.dao.entity.RcsArchiveFlow" >
+    select
+    distinct u.USER_NAME_
+    from rcs_archive_flow r, sys_users u
+    <where>
+      r.OPERATOR_ = u.USER_ID_ and r.OPERATOR_ = #{operator}
+    </where>
+  </select>
+</mapper>

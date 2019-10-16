@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhdtedu.riverchiefs.dao.mapper.RcsArchiveInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.zhdtedu.riverchiefs.dao.entity.RcsArchiveInfo" >
+    <id column="ID_" property="id" jdbcType="INTEGER" />
+    <result column="ARCH_NUM_" property="archNum" jdbcType="VARCHAR" />
+    <result column="QUESTION_FROM_" property="questionFrom" jdbcType="VARCHAR" />
+    <result column="QUESTION_TYPE_" property="questionType" jdbcType="VARCHAR" />
+    <result column="QUESTION_ADDR_" property="questionAddr" jdbcType="VARCHAR" />
+    <result column="MAP_LEVEL_" property="mapLevel" jdbcType="VARCHAR" />
+    <result column="MAP_ADDR_" property="mapAddr" jdbcType="VARCHAR" />
+    <result column="SUOS_LIUY_" property="suosLiuy" jdbcType="VARCHAR" />
+    <result column="CALL_PHONE_" property="callPhone" jdbcType="VARCHAR" />
+    <result column="HDZ_NUM_" property="hdzNum" jdbcType="VARCHAR" />
+    <result column="HDZ_REALNAME_" property="hdzRealname" jdbcType="VARCHAR" />
+    <result column="HDZ_PHONE_" property="hdzPhone" jdbcType="VARCHAR" />
+    <result column="JBR_REALNAME_" property="jbrRealname" jdbcType="VARCHAR" />
+    <result column="DESCRIPTION_" property="description" jdbcType="VARCHAR" />
+    <result column="REPORT_ID_" property="reportId" jdbcType="INTEGER" />
+    <result column="REPORT_REALNAME_" property="reportRealname" jdbcType="VARCHAR" />
+    <result column="REPORT_DATE_" property="reportDate" jdbcType="TIMESTAMP" />
+    <result column="STATUS_" property="status" jdbcType="VARCHAR" />
+    <result column="EXT1_" property="ext1" jdbcType="VARCHAR" />
+    <association property="cid" javaType="com.zhdtedu.riverchiefs.dao.entity.RcsCoordinateInfo">
+      <id property="id" column="CID"/>
+      <result property="longitude" column="LONGITUDE_"/>
+      <result property="latitude" column="LATITUDE_"/>
+      <result property="name" column="NAME_"/>
+      <result property="ext" column="EXT_"/>
+    </association>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ai.ID_, ARCH_NUM_, QUESTION_FROM_, QUESTION_TYPE_, QUESTION_ADDR_, MAP_LEVEL_, MAP_ADDR_,
+    SUOS_LIUY_, CALL_PHONE_, HDZ_NUM_, HDZ_REALNAME_, HDZ_PHONE_, JBR_REALNAME_, DESCRIPTION_,
+    REPORT_ID_, REPORT_REALNAME_, REPORT_DATE_, STATUS_, EXT1_,COORDINATE_ID_,ci.ID_ CID,LONGITUDE_,
+    LATITUDE_,NAME_,EXT_
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from rcs_archive_info ai,rcs_coordinate_info ci
+    where  ai.COORDINATE_ID_=ci.ID_  and ai.ID_ = #{id,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from rcs_archive_info
+    where ID_ = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.zhdtedu.riverchiefs.bean.RcsArchiveInfoVo" >
+    <selectKey keyProperty="id" order="AFTER" resultType="Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into rcs_archive_info (ID_, ARCH_NUM_, QUESTION_FROM_, QUESTION_TYPE_,
+     QUESTION_ADDR_, MAP_LEVEL_, MAP_ADDR_,
+    SUOS_LIUY_, CALL_PHONE_, HDZ_NUM_, HDZ_REALNAME_, HDZ_PHONE_, JBR_REALNAME_,JBR_PHONE_, DESCRIPTION_,
+    REPORT_ID_, REPORT_REALNAME_, REPORT_DATE_, STATUS_, EXT1_,COORDINATE_ID_ )
+
+    values (#{id,jdbcType=INTEGER}, #{archNum,jdbcType=VARCHAR}, #{questionFrom,jdbcType=VARCHAR}, 
+      #{questionType,jdbcType=VARCHAR}, #{questionAddr,jdbcType=VARCHAR}, #{mapLevel,jdbcType=VARCHAR}, 
+      #{mapAddr,jdbcType=VARCHAR}, #{suosLiuy,jdbcType=VARCHAR}, #{callPhone,jdbcType=VARCHAR}, 
+      #{hdzNum,jdbcType=VARCHAR}, #{hdzRealname,jdbcType=VARCHAR}, #{hdzPhone,jdbcType=VARCHAR}, 
+      #{jbrRealname,jdbcType=VARCHAR},#{jbrPhone,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{reportId,jdbcType=INTEGER},
+      #{reportRealname,jdbcType=VARCHAR}, #{reportDate,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR},
+      #{ext1,jdbcType=VARCHAR},#{cid.id,jdbcType=INTEGER})
+
+  </insert>
+ <!-- ,COORDINATE_ID_  ,#{cid.id,jdbcType=INTEGER}-->
+  <insert id="insertSelective" parameterType="com.zhdtedu.riverchiefs.bean.RcsArchiveInfoVo" >
+    insert into rcs_archive_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID_,
+      </if>
+      <if test="archNum != null" >
+        ARCH_NUM_,
+      </if>
+      <if test="questionFrom != null" >
+        QUESTION_FROM_,
+      </if>
+      <if test="questionType != null" >
+        QUESTION_TYPE_,
+      </if>
+      <if test="questionAddr != null" >
+        QUESTION_ADDR_,
+      </if>
+      <if test="mapLevel != null" >
+        MAP_LEVEL_,
+      </if>
+      <if test="mapAddr != null" >
+        MAP_ADDR_,
+      </if>
+      <if test="suosLiuy != null" >
+        SUOS_LIUY_,
+      </if>
+      <if test="callPhone != null" >
+        CALL_PHONE_,
+      </if>
+      <if test="hdzNum != null" >
+        HDZ_NUM_,
+      </if>
+      <if test="hdzRealname != null" >
+        HDZ_REALNAME_,
+      </if>
+      <if test="hdzPhone != null" >
+        HDZ_PHONE_,
+      </if>
+      <if test="jbrRealname != null" >
+        JBR_REALNAME_,
+      </if>
+      <if test="description != null" >
+        DESCRIPTION_,
+      </if>
+      <if test="reportId != null" >
+        REPORT_ID_,
+      </if>
+      <if test="reportRealname != null" >
+        REPORT_REALNAME_,
+      </if>
+      <if test="reportDate != null" >
+        REPORT_DATE_,
+      </if>
+      <if test="status != null" >
+        STATUS_,
+      </if>
+      <if test="ext1 != null" >
+        EXT1_,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="archNum != null" >
+        #{archNum,jdbcType=VARCHAR},
+      </if>
+      <if test="questionFrom != null" >
+        #{questionFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="questionType != null" >
+        #{questionType,jdbcType=VARCHAR},
+      </if>
+      <if test="questionAddr != null" >
+        #{questionAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="mapLevel != null" >
+        #{mapLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="mapAddr != null" >
+        #{mapAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="suosLiuy != null" >
+        #{suosLiuy,jdbcType=VARCHAR},
+      </if>
+      <if test="callPhone != null" >
+        #{callPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="hdzNum != null" >
+        #{hdzNum,jdbcType=VARCHAR},
+      </if>
+      <if test="hdzRealname != null" >
+        #{hdzRealname,jdbcType=VARCHAR},
+      </if>
+      <if test="hdzPhone != null" >
+        #{hdzPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="jbrRealname != null" >
+        #{jbrRealname,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="reportId != null" >
+        #{reportId,jdbcType=INTEGER},
+      </if>
+      <if test="reportRealname != null" >
+        #{reportRealname,jdbcType=VARCHAR},
+      </if>
+      <if test="reportDate != null" >
+        #{reportDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="ext1 != null" >
+        #{ext1,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhdtedu.riverchiefs.dao.entity.RcsArchiveInfo" >
+    update rcs_archive_info
+    <set >
+      <if test="archNum != null" >
+        ARCH_NUM_ = #{archNum,jdbcType=VARCHAR},
+      </if>
+      <if test="questionFrom != null" >
+        QUESTION_FROM_ = #{questionFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="questionType != null" >
+        QUESTION_TYPE_ = #{questionType,jdbcType=VARCHAR},
+      </if>
+      <if test="questionAddr != null" >
+        QUESTION_ADDR_ = #{questionAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="mapLevel != null" >
+        MAP_LEVEL_ = #{mapLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="mapAddr != null" >
+        MAP_ADDR_ = #{mapAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="suosLiuy != null" >
+        SUOS_LIUY_ = #{suosLiuy,jdbcType=VARCHAR},
+      </if>
+      <if test="callPhone != null" >
+        CALL_PHONE_ = #{callPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="hdzNum != null" >
+        HDZ_NUM_ = #{hdzNum,jdbcType=VARCHAR},
+      </if>
+      <if test="hdzRealname != null" >
+        HDZ_REALNAME_ = #{hdzRealname,jdbcType=VARCHAR},
+      </if>
+      <if test="hdzPhone != null" >
+        HDZ_PHONE_ = #{hdzPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="jbrRealname != null" >
+        JBR_REALNAME_ = #{jbrRealname,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        DESCRIPTION_ = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="reportId != null" >
+        REPORT_ID_ = #{reportId,jdbcType=INTEGER},
+      </if>
+      <if test="reportRealname != null" >
+        REPORT_REALNAME_ = #{reportRealname,jdbcType=VARCHAR},
+      </if>
+      <if test="reportDate != null" >
+        REPORT_DATE_ = #{reportDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        STATUS_ = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="ext1 != null" >
+        EXT1_ = #{ext1,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID_ = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhdtedu.riverchiefs.bean.RcsArchiveInfoVo" >
+    update rcs_archive_info
+    set ARCH_NUM_ = #{archNum,jdbcType=VARCHAR},
+      QUESTION_FROM_ = #{questionFrom,jdbcType=VARCHAR},
+      QUESTION_TYPE_ = #{questionType,jdbcType=VARCHAR},
+      QUESTION_ADDR_ = #{questionAddr,jdbcType=VARCHAR},
+      MAP_LEVEL_ = #{mapLevel,jdbcType=VARCHAR},
+      MAP_ADDR_ = #{mapAddr,jdbcType=VARCHAR},
+      SUOS_LIUY_ = #{suosLiuy,jdbcType=VARCHAR},
+      CALL_PHONE_ = #{callPhone,jdbcType=VARCHAR},
+      HDZ_NUM_ = #{hdzNum,jdbcType=VARCHAR},
+      HDZ_REALNAME_ = #{hdzRealname,jdbcType=VARCHAR},
+      HDZ_PHONE_ = #{hdzPhone,jdbcType=VARCHAR},
+      JBR_REALNAME_ = #{jbrRealname,jdbcType=VARCHAR},
+      DESCRIPTION_ = #{description,jdbcType=VARCHAR},
+      REPORT_ID_ = #{reportId,jdbcType=INTEGER},
+      REPORT_REALNAME_ = #{reportRealname,jdbcType=VARCHAR},
+      REPORT_DATE_ = #{reportDate,jdbcType=TIMESTAMP},
+      STATUS_ = #{status,jdbcType=VARCHAR},
+      EXT1_ = #{ext1,jdbcType=VARCHAR},
+      COORDINATE_ID_ = #{cid.id,jdbcType=INTEGER}
+    where ID_ = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="pageQuery" resultMap="BaseResultMap" parameterType="java.util.Map">
+    select
+    *
+    from rcs_archive_info where 1=1
+    <if test="archNum !=null">
+     and  ARCH_NUM_ like concat('%',#{archNum},'%')
+    </if>
+    <if test="questionFrom !=null">
+      and QUESTION_FROM_ like concat('%',#{questionFrom},'%')
+    </if>
+    <if test="questionType !=null ">
+      and QUESTION_TYPE_ like concat('%',#{questionType},'%')
+    </if>
+    <if test="suosLiuy !=null">
+      and SUOS_LIUY_ like concat('%',#{suosLiuy},'%')
+    </if>
+    <if test="orderBy!=null" >
+      order by  #{orderBy}
+    </if><!-- #{sort}  #{order}-->
+    <if test="pageSize!=null">
+      limit #{startNo},#{pageSize}
+    </if>
+  </select>
+
+  <select id="count" resultType="java.lang.Integer">
+    select count(id_) from  rcs_archive_info where 1=1
+    <if test="archNum !=null">
+      and ARCH_NUM_ like concat('%',#{archNum},'%')
+    </if>
+    <if test="questionFrom !=null">
+      and QUESTION_FROM_ like concat('%',#{questionFrom},'%')
+    </if>
+    <if test="questionType !=null">
+      and QUESTION_TYPE_ like concat('%',#{questionType},'%')
+    </if>
+    <if test="suosLiuy !=null">
+      and SUOS_LIUY_ like concat('%',#{suosLiuy},'%')
+    </if>
+  </select>
+
+
+  <select id="selectArchNumMaxCode" resultType="Long" parameterType="String">
+        SELECT max(ARCH_NUM_)+1 as ARCH_NUM_  from rcs_archive_info r where r.ARCH_NUM_ like concat(#{code},'%');
+  </select>
+
+  <resultMap id="BasinResultMap" type="com.zhdtedu.riverchiefs.dao.entity.BasinInfo" >
+    <id column="ID_" property="id" jdbcType="BIGINT" />
+    <result column="NAME_" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="DictBaseResultMap" type="com.zhdtedu.system.dao.entity.BaseData" >
+    <id column="ID_" property="id" jdbcType="BIGINT" />
+    <result column="NAME_" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="findQuestionType" resultMap="DictBaseResultMap">
+            select d2.NAME_  ,d2.ID_ from sys_dict_base AS d1,sys_dict_base as d2 where
+                 d2.PARENT_ID_ = d1.ID_ AND (d1.CODE_='8070004' OR d1.NAME_ LIKE '%问题类型%')
+  </select>
+
+  <select id="findQuestionFrom" resultMap="DictBaseResultMap">
+            select d2.NAME_,d2.ID_ from sys_dict_base AS d1,sys_dict_base as d2 where
+                 d2.PARENT_ID_ = d1.ID_ AND (d1.CODE_='8070003' OR d1.NAME_ LIKE '%问题来源%')
+  </select>
+
+  <select id="findSuosLiuy" resultMap="BasinResultMap">
+       select * from rcs_basin_info
+  </select>
+</mapper>

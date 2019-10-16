@@ -1,0 +1,567 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhdtedu.riverchiefs.dao.mapper.BasinInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.zhdtedu.riverchiefs.dao.entity.BasinInfo" >
+    <id column="ID_" property="id" jdbcType="BIGINT" />
+    <result column="CODE_" property="code" jdbcType="BIGINT" />
+    <result column="PARENT_ID_" property="parentId" jdbcType="BIGINT" />
+    <result column="TYPE_" property="type" jdbcType="INTEGER" />
+    <result column="NAME_" property="name" jdbcType="VARCHAR" />
+    <result column="FIRST_MANAGER_" property="firstManager" jdbcType="VARCHAR" />
+    <result column="FIRST_POST_" property="firstPost" jdbcType="VARCHAR" />
+    <result column="FIRST_TEL_" property="firstTel" jdbcType="VARCHAR" />
+    <result column="SECOND_MANAGER_" property="secondManager" jdbcType="VARCHAR" />
+    <result column="SECOND_POST_" property="secondPost" jdbcType="VARCHAR" />
+    <result column="SECOND_TEL_" property="secondTel" jdbcType="VARCHAR" />
+    <result column="MAP_LEVEL_" property="mapLevel" jdbcType="VARCHAR" />
+    <result column="POINT_" property="point" jdbcType="VARCHAR" />
+    <result column="OUTLINE_" property="outline" jdbcType="VARCHAR" />
+    <result column="COLOR_" property="color" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME_" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME_" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="IS_PARENT" property="isParent" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.zhdtedu.riverchiefs.dao.entity.BasinInfo" extends="BaseResultMap" >
+    <result column="DESCRIPTION_" property="description" jdbcType="LONGVARCHAR" />
+    <result column="DUTY_" property="duty" jdbcType="LONGVARCHAR" />
+    <result column="DEPT_" property="dept" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID_, CODE_, PARENT_ID_, TYPE_, NAME_, FIRST_MANAGER_, FIRST_POST_, FIRST_TEL_, SECOND_MANAGER_, 
+    SECOND_POST_, SECOND_TEL_, MAP_LEVEL_, POINT_, OUTLINE_, COLOR_, CREATE_TIME_, UPDATE_TIME_, 
+    IS_PARENT
+  </sql>
+  <sql id="Blob_Column_List" >
+    DESCRIPTION_, DUTY_, DEPT_
+  </sql>
+
+  <select id="selectByBasinExample" resultMap="BaseResultMap"   >
+    select
+    <include refid="Base_Column_List" />
+    from rcs_basin_info
+    where 1=1
+    <if test="parentId != null">
+      and PARENT_ID_=#{parentId}
+    </if>
+  </select>
+  <!--更新父节点id-->
+  <update id="updateParent" parameterType="Long">
+   update  rcs_basin_info
+   set  IS_PARENT=1
+   where  ID_=#{parentId}
+ </update>
+  <select id="selectNodesByParentId" resultType="int">
+    select
+    count(1) as count
+    from rcs_basin_info
+    where 1=1
+    <if test="parentId != null">
+      and PARENT_ID_=#{parentId}
+    </if>
+  </select>
+  <!--更新父节点的isParent=0-->
+  <update id="updateIsParent" parameterType="Long">
+   update  rcs_basin_info
+   set  IS_PARENT=0
+   where  ID_=#{parentId}
+ </update>
+
+
+
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.zhdtedu.riverchiefs.dao.entity.BasinInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from rcs_basin_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.zhdtedu.riverchiefs.dao.entity.BasinInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from rcs_basin_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from rcs_basin_info
+    where ID_ = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from rcs_basin_info
+    where ID_ = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zhdtedu.riverchiefs.dao.entity.BasinInfoExample" >
+    delete from rcs_basin_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zhdtedu.riverchiefs.dao.entity.BasinInfo" >
+    insert into rcs_basin_info (ID_, CODE_, PARENT_ID_, 
+      TYPE_, NAME_, FIRST_MANAGER_, 
+      FIRST_POST_, FIRST_TEL_, SECOND_MANAGER_, 
+      SECOND_POST_, SECOND_TEL_, MAP_LEVEL_, 
+      POINT_, OUTLINE_, COLOR_, 
+      CREATE_TIME_, UPDATE_TIME_, IS_PARENT, 
+      DESCRIPTION_, DUTY_, DEPT_
+      )
+    values (#{id,jdbcType=BIGINT}, #{code,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT}, 
+      #{type,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{firstManager,jdbcType=VARCHAR}, 
+      #{firstPost,jdbcType=VARCHAR}, #{firstTel,jdbcType=VARCHAR}, #{secondManager,jdbcType=VARCHAR}, 
+      #{secondPost,jdbcType=VARCHAR}, #{secondTel,jdbcType=VARCHAR}, #{mapLevel,jdbcType=VARCHAR}, 
+      #{point,jdbcType=VARCHAR}, #{outline,jdbcType=VARCHAR}, #{color,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{isParent,jdbcType=INTEGER}, 
+      #{description,jdbcType=LONGVARCHAR}, #{duty,jdbcType=LONGVARCHAR}, #{dept,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhdtedu.riverchiefs.dao.entity.BasinInfo" >
+    insert into rcs_basin_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID_,
+      </if>
+      <if test="code != null" >
+        CODE_,
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID_,
+      </if>
+      <if test="type != null" >
+        TYPE_,
+      </if>
+      <if test="name != null" >
+        NAME_,
+      </if>
+      <if test="firstManager != null" >
+        FIRST_MANAGER_,
+      </if>
+      <if test="firstPost != null" >
+        FIRST_POST_,
+      </if>
+      <if test="firstTel != null" >
+        FIRST_TEL_,
+      </if>
+      <if test="secondManager != null" >
+        SECOND_MANAGER_,
+      </if>
+      <if test="secondPost != null" >
+        SECOND_POST_,
+      </if>
+      <if test="secondTel != null" >
+        SECOND_TEL_,
+      </if>
+      <if test="mapLevel != null" >
+        MAP_LEVEL_,
+      </if>
+      <if test="point != null" >
+        POINT_,
+      </if>
+      <if test="outline != null" >
+        OUTLINE_,
+      </if>
+      <if test="color != null" >
+        COLOR_,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME_,
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME_,
+      </if>
+      <if test="isParent != null" >
+        IS_PARENT,
+      </if>
+      <if test="description != null" >
+        DESCRIPTION_,
+      </if>
+      <if test="duty != null" >
+        DUTY_,
+      </if>
+      <if test="dept != null" >
+        DEPT_,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=BIGINT},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="firstManager != null" >
+        #{firstManager,jdbcType=VARCHAR},
+      </if>
+      <if test="firstPost != null" >
+        #{firstPost,jdbcType=VARCHAR},
+      </if>
+      <if test="firstTel != null" >
+        #{firstTel,jdbcType=VARCHAR},
+      </if>
+      <if test="secondManager != null" >
+        #{secondManager,jdbcType=VARCHAR},
+      </if>
+      <if test="secondPost != null" >
+        #{secondPost,jdbcType=VARCHAR},
+      </if>
+      <if test="secondTel != null" >
+        #{secondTel,jdbcType=VARCHAR},
+      </if>
+      <if test="mapLevel != null" >
+        #{mapLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="point != null" >
+        #{point,jdbcType=VARCHAR},
+      </if>
+      <if test="outline != null" >
+        #{outline,jdbcType=VARCHAR},
+      </if>
+      <if test="color != null" >
+        #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isParent != null" >
+        #{isParent,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="duty != null" >
+        #{duty,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="dept != null" >
+        #{dept,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zhdtedu.riverchiefs.dao.entity.BasinInfoExample" resultType="java.lang.Integer" >
+    select count(*) from rcs_basin_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update rcs_basin_info
+    <set >
+      <if test="record.id != null" >
+        ID_ = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.code != null" >
+        CODE_ = #{record.code,jdbcType=BIGINT},
+      </if>
+      <if test="record.parentId != null" >
+        PARENT_ID_ = #{record.parentId,jdbcType=BIGINT},
+      </if>
+      <if test="record.type != null" >
+        TYPE_ = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null" >
+        NAME_ = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.firstManager != null" >
+        FIRST_MANAGER_ = #{record.firstManager,jdbcType=VARCHAR},
+      </if>
+      <if test="record.firstPost != null" >
+        FIRST_POST_ = #{record.firstPost,jdbcType=VARCHAR},
+      </if>
+      <if test="record.firstTel != null" >
+        FIRST_TEL_ = #{record.firstTel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.secondManager != null" >
+        SECOND_MANAGER_ = #{record.secondManager,jdbcType=VARCHAR},
+      </if>
+      <if test="record.secondPost != null" >
+        SECOND_POST_ = #{record.secondPost,jdbcType=VARCHAR},
+      </if>
+      <if test="record.secondTel != null" >
+        SECOND_TEL_ = #{record.secondTel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mapLevel != null" >
+        MAP_LEVEL_ = #{record.mapLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.point != null" >
+        POINT_ = #{record.point,jdbcType=VARCHAR},
+      </if>
+      <if test="record.outline != null" >
+        OUTLINE_ = #{record.outline,jdbcType=VARCHAR},
+      </if>
+      <if test="record.color != null" >
+        COLOR_ = #{record.color,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        CREATE_TIME_ = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        UPDATE_TIME_ = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isParent != null" >
+        IS_PARENT = #{record.isParent,jdbcType=INTEGER},
+      </if>
+      <if test="record.description != null" >
+        DESCRIPTION_ = #{record.description,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.duty != null" >
+        DUTY_ = #{record.duty,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.dept != null" >
+        DEPT_ = #{record.dept,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update rcs_basin_info
+    set ID_ = #{record.id,jdbcType=BIGINT},
+      CODE_ = #{record.code,jdbcType=BIGINT},
+      PARENT_ID_ = #{record.parentId,jdbcType=BIGINT},
+      TYPE_ = #{record.type,jdbcType=INTEGER},
+      NAME_ = #{record.name,jdbcType=VARCHAR},
+      FIRST_MANAGER_ = #{record.firstManager,jdbcType=VARCHAR},
+      FIRST_POST_ = #{record.firstPost,jdbcType=VARCHAR},
+      FIRST_TEL_ = #{record.firstTel,jdbcType=VARCHAR},
+      SECOND_MANAGER_ = #{record.secondManager,jdbcType=VARCHAR},
+      SECOND_POST_ = #{record.secondPost,jdbcType=VARCHAR},
+      SECOND_TEL_ = #{record.secondTel,jdbcType=VARCHAR},
+      MAP_LEVEL_ = #{record.mapLevel,jdbcType=VARCHAR},
+      POINT_ = #{record.point,jdbcType=VARCHAR},
+      OUTLINE_ = #{record.outline,jdbcType=VARCHAR},
+      COLOR_ = #{record.color,jdbcType=VARCHAR},
+      CREATE_TIME_ = #{record.createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME_ = #{record.updateTime,jdbcType=TIMESTAMP},
+      IS_PARENT = #{record.isParent,jdbcType=INTEGER},
+      DESCRIPTION_ = #{record.description,jdbcType=LONGVARCHAR},
+      DUTY_ = #{record.duty,jdbcType=LONGVARCHAR},
+      DEPT_ = #{record.dept,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update rcs_basin_info
+    set ID_ = #{record.id,jdbcType=BIGINT},
+      CODE_ = #{record.code,jdbcType=BIGINT},
+      PARENT_ID_ = #{record.parentId,jdbcType=BIGINT},
+      TYPE_ = #{record.type,jdbcType=INTEGER},
+      NAME_ = #{record.name,jdbcType=VARCHAR},
+      FIRST_MANAGER_ = #{record.firstManager,jdbcType=VARCHAR},
+      FIRST_POST_ = #{record.firstPost,jdbcType=VARCHAR},
+      FIRST_TEL_ = #{record.firstTel,jdbcType=VARCHAR},
+      SECOND_MANAGER_ = #{record.secondManager,jdbcType=VARCHAR},
+      SECOND_POST_ = #{record.secondPost,jdbcType=VARCHAR},
+      SECOND_TEL_ = #{record.secondTel,jdbcType=VARCHAR},
+      MAP_LEVEL_ = #{record.mapLevel,jdbcType=VARCHAR},
+      POINT_ = #{record.point,jdbcType=VARCHAR},
+      OUTLINE_ = #{record.outline,jdbcType=VARCHAR},
+      COLOR_ = #{record.color,jdbcType=VARCHAR},
+      CREATE_TIME_ = #{record.createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME_ = #{record.updateTime,jdbcType=TIMESTAMP},
+      IS_PARENT = #{record.isParent,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhdtedu.riverchiefs.dao.entity.BasinInfo" >
+    update rcs_basin_info
+    <set >
+      <if test="code != null" >
+        CODE_ = #{code,jdbcType=BIGINT},
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID_ = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        TYPE_ = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        NAME_ = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="firstManager != null" >
+        FIRST_MANAGER_ = #{firstManager,jdbcType=VARCHAR},
+      </if>
+      <if test="firstPost != null" >
+        FIRST_POST_ = #{firstPost,jdbcType=VARCHAR},
+      </if>
+      <if test="firstTel != null" >
+        FIRST_TEL_ = #{firstTel,jdbcType=VARCHAR},
+      </if>
+      <if test="secondManager != null" >
+        SECOND_MANAGER_ = #{secondManager,jdbcType=VARCHAR},
+      </if>
+      <if test="secondPost != null" >
+        SECOND_POST_ = #{secondPost,jdbcType=VARCHAR},
+      </if>
+      <if test="secondTel != null" >
+        SECOND_TEL_ = #{secondTel,jdbcType=VARCHAR},
+      </if>
+      <if test="mapLevel != null" >
+        MAP_LEVEL_ = #{mapLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="point != null" >
+        POINT_ = #{point,jdbcType=VARCHAR},
+      </if>
+      <if test="outline != null" >
+        OUTLINE_ = #{outline,jdbcType=VARCHAR},
+      </if>
+      <if test="color != null" >
+        COLOR_ = #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME_ = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME_ = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isParent != null" >
+        IS_PARENT = #{isParent,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        DESCRIPTION_ = #{description,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="duty != null" >
+        DUTY_ = #{duty,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="dept != null" >
+        DEPT_ = #{dept,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where ID_ = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zhdtedu.riverchiefs.dao.entity.BasinInfo" >
+    update rcs_basin_info
+    set CODE_ = #{code,jdbcType=BIGINT},
+      PARENT_ID_ = #{parentId,jdbcType=BIGINT},
+      TYPE_ = #{type,jdbcType=INTEGER},
+      NAME_ = #{name,jdbcType=VARCHAR},
+      FIRST_MANAGER_ = #{firstManager,jdbcType=VARCHAR},
+      FIRST_POST_ = #{firstPost,jdbcType=VARCHAR},
+      FIRST_TEL_ = #{firstTel,jdbcType=VARCHAR},
+      SECOND_MANAGER_ = #{secondManager,jdbcType=VARCHAR},
+      SECOND_POST_ = #{secondPost,jdbcType=VARCHAR},
+      SECOND_TEL_ = #{secondTel,jdbcType=VARCHAR},
+      MAP_LEVEL_ = #{mapLevel,jdbcType=VARCHAR},
+      POINT_ = #{point,jdbcType=VARCHAR},
+      OUTLINE_ = #{outline,jdbcType=VARCHAR},
+      COLOR_ = #{color,jdbcType=VARCHAR},
+      CREATE_TIME_ = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME_ = #{updateTime,jdbcType=TIMESTAMP},
+      IS_PARENT = #{isParent,jdbcType=INTEGER},
+      DESCRIPTION_ = #{description,jdbcType=LONGVARCHAR},
+      DUTY_ = #{duty,jdbcType=LONGVARCHAR},
+      DEPT_ = #{dept,jdbcType=LONGVARCHAR}
+    where ID_ = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhdtedu.riverchiefs.dao.entity.BasinInfo" >
+    update rcs_basin_info
+    set CODE_ = #{code,jdbcType=BIGINT},
+      PARENT_ID_ = #{parentId,jdbcType=BIGINT},
+      TYPE_ = #{type,jdbcType=INTEGER},
+      NAME_ = #{name,jdbcType=VARCHAR},
+      FIRST_MANAGER_ = #{firstManager,jdbcType=VARCHAR},
+      FIRST_POST_ = #{firstPost,jdbcType=VARCHAR},
+      FIRST_TEL_ = #{firstTel,jdbcType=VARCHAR},
+      SECOND_MANAGER_ = #{secondManager,jdbcType=VARCHAR},
+      SECOND_POST_ = #{secondPost,jdbcType=VARCHAR},
+      SECOND_TEL_ = #{secondTel,jdbcType=VARCHAR},
+      MAP_LEVEL_ = #{mapLevel,jdbcType=VARCHAR},
+      POINT_ = #{point,jdbcType=VARCHAR},
+      OUTLINE_ = #{outline,jdbcType=VARCHAR},
+      COLOR_ = #{color,jdbcType=VARCHAR},
+      CREATE_TIME_ = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME_ = #{updateTime,jdbcType=TIMESTAMP},
+      IS_PARENT = #{isParent,jdbcType=INTEGER}
+    where ID_ = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
